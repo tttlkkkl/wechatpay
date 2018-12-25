@@ -43,6 +43,7 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 		return nil, err
 	}
 	str_req := string(bytes_req)
+	fmt.Println("======签名后 xml 字符串====", str_req)
 	str_req = strings.Replace(str_req, "UnitOrder", "xml", -1)
 	req, err := http.NewRequest("POST", UNIT_ORDER_URL, bytes.NewReader([]byte(str_req)))
 	if err != nil {
