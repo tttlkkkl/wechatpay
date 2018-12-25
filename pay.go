@@ -2,6 +2,7 @@ package wechatpay
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/xml"
 	"io/ioutil"
 	"net/http"
@@ -50,8 +51,10 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.TradeType == "MWEB" {
 		req.Header.Set("Referer", param.Referer)
 	}
-
-	w_req := http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	w_req := http.Client{Transport: tr}
 	resp, err := w_req.Do(req)
 	if err != nil {
 		return nil, err
