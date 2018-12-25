@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -34,6 +35,7 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.TradeType == "JSAPI" {
 		m["openid"] = param.Openid
 	}
+	fmt.Println("=======微信支付申请单=========", m)
 	param.Sign = GetSign(m, this.ApiKey)
 
 	bytes_req, err := xml.Marshal(param)
