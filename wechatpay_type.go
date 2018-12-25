@@ -25,6 +25,7 @@ type UnitOrder struct {
 	SceneInfo      string `xml:"scene_info"`
 	Openid         string `xml:"openid"`
 	Referer        string
+	TimeExpire     string `xml:"time_expire"`
 }
 
 //统一下单返回参数
