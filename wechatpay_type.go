@@ -24,8 +24,9 @@ type UnitOrder struct {
 	OutTradeNo     string `xml:"out_trade_no"`
 	SceneInfo      string `xml:"scene_info"`
 	Openid         string `xml:"openid"`
-	Referer        string
 	TimeExpire     string `xml:"time_expire"`
+	Attach         string `xml:"attach"`
+	Referer        string
 }
 
 //统一下单返回参数
