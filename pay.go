@@ -35,6 +35,12 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.TradeType == "JSAPI" {
 		m["openid"] = param.Openid
 	}
+	if param.TimeExpire != "" {
+		m["time_expire"] = param.TimeExpire
+	}
+	if param.Attach != "" {
+		m["attach"] = param.Attach
+	}
 	fmt.Println("=======微信支付申请单=========", m)
 	param.Sign = GetSign(m, this.ApiKey)
 
