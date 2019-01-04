@@ -12,7 +12,9 @@ import (
 //退款
 func (this *WechatPay) Refund(param OrderRefund) (*OrderRefundResult, error) {
 
-	param.AppId = this.AppId
+	if param.AppId == "" {
+		param.AppId = this.AppId
+	}
 	param.MchId = this.MchId
 	param.NonceStr = randomNonceStr()
 
