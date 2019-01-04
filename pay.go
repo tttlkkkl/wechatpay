@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -41,7 +40,7 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.Attach != "" {
 		m["attach"] = param.Attach
 	}
-	fmt.Println("=======微信支付申请单=========", m)
+	//fmt.Println("=======微信支付申请单=========", m)
 	param.Sign = GetSign(m, this.ApiKey)
 
 	bytes_req, err := xml.Marshal(param)
@@ -49,7 +48,7 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 		return nil, err
 	}
 	str_req := string(bytes_req)
-	fmt.Println("======签名后 xml 字符串====", str_req)
+	//fmt.Println("======签名后 xml 字符串====", str_req)
 	str_req = strings.Replace(str_req, "UnitOrder", "xml", -1)
 	req, err := http.NewRequest("POST", UNIT_ORDER_URL, bytes.NewReader([]byte(str_req)))
 	if err != nil {
