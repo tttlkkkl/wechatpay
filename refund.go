@@ -56,7 +56,7 @@ func (this *WechatPay) Refund(param OrderRefund) (*OrderRefundResult, error) {
 	resp, _err := w_req.Do(req)
 	if _err != nil {
 		log.Error(err, "http request failed! err :"+_err.Error())
-		return nil, err
+		return nil, _err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 
@@ -65,7 +65,7 @@ func (this *WechatPay) Refund(param OrderRefund) (*OrderRefundResult, error) {
 	_err = xml.Unmarshal(body, &refund_resp)
 	if _err != nil {
 		log.Error(err, "http request failed! err :"+_err.Error())
-		return nil, err
+		return nil, _err
 	}
 	return &refund_resp, nil
 }

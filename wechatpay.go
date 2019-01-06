@@ -59,7 +59,7 @@ func GetSign(mReq map[string]interface{}, key string) (sign string) {
 
 //微信支付签名验证函数
 func (this *WechatPay) VerifySign(needVerifyM map[string]interface{}, sign string) bool {
-	delete(needVerifyM,"sign")
+	delete(needVerifyM, "sign")
 	signCalc := GetSign(needVerifyM, this.ApiKey)
 	if sign == signCalc {
 		log.Info("wechat verify success!")
@@ -72,7 +72,7 @@ func (this *WechatPay) VerifySign(needVerifyM map[string]interface{}, sign strin
 func WithCertBytes(cert, key []byte) *http.Transport {
 	tlsCert, err := tls.X509KeyPair(cert, key)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("----通信证书错误---", err.Error())
 		return nil
 	}
 	conf := &tls.Config{
