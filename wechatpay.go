@@ -76,7 +76,8 @@ func WithCertBytes(cert, key []byte) *http.Transport {
 		return nil
 	}
 	conf := &tls.Config{
-		Certificates: []tls.Certificate{tlsCert},
+		Certificates:       []tls.Certificate{tlsCert},
+		InsecureSkipVerify: true,
 	}
 	trans := &http.Transport{
 		TLSClientConfig: conf,
