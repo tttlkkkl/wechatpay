@@ -4,6 +4,7 @@ const (
 	UNIT_ORDER_URL   = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 	REFUND_URL       = "https://api.mch.weixin.qq.com/secapi/pay/refund"
 	REFUND_QUERY_URL = "https://api.mch.weixin.qq.com/pay/refundquery"
+	TRANSFERS_URL    = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers"
 )
 
 type Base struct {
@@ -130,4 +131,34 @@ type OrderRefundQueryResult struct {
 	RefundStatus_0        string `xml:"refund_status_0"`
 	SettlementRefundFee_0 string `xml:"settlement_refund_fee_0"`
 	ErrCodeDes            string `xml:"err_code_des"`
+}
+
+// EnterpriseTransfers 企业付款参数
+type EnterpriseTransfers struct {
+	MchAppID       string `xml:"mch_appid"`
+	MchID          string `xml:"mchid"`
+	DeviceInfo     string `xml:"device_info"`
+	NonceStr       string `xml:"nonce_str"`
+	Sign           string `xml:"sign"`
+	PartnerTradeNo string `xml:"partner_trade_no"`
+	Openid         string `xml:"openid"`
+	CheckName      string `xml:"check_name"`
+	ReUserName     string `xml:"re_user_name"`
+	Amount         int    `xml:"amount"`
+	Desc           string `xml:"desc"`
+	SpBillCreateIP string `xml:"spbill_create_ip"`
+}
+
+// EnterpriseTransfersResult 企业付款返回结果
+type EnterpriseTransfersResult struct {
+	ReturnCode     string `xml:"return_code"`
+	ReturnMsg      string `xml:"return_msg"`
+	MchAppID       string `xml:"mch_appid"`
+	MchID          string `xml:"mchid"`
+	DeviceInfo     string `xml:"device_info"`
+	NonceStr       string `xml:"nonce_str"`
+	ErrCode        string `xml:"err_code"`
+	ErrCodeDes     string `xml:"err_code_des"`
+	PartnerTradeNo string `xml:"partner_trade_no"`
+	PaymentTime    string `xml:"payment_time"`
 }

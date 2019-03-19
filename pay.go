@@ -76,3 +76,54 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	}
 	return &pay_result, nil
 }
+
+// Transfers 企业付款
+func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResult, error) {
+	p.MchID = w.MchId
+	if p.MchAppID == "" {
+		p.MchAppID = w.AppId
+	}
+	p.NonceStr = randomNonceStr()
+	var m = map[string]interface{}{
+		"mch_appid":        p.MchAppID,
+		"mchid":            p.MchID,
+		"device_info":      p.DeviceInfo,
+		"nonce_str":        p.NonceStr,
+		"sign":             p.Sign,
+		"partner_trade_no": p.PartnerTradeNo,
+		"openid":           p.Openid,
+		"check_name":       p.CheckName,
+		"re_user_name":     p.ReUserName,
+		"amount":           p.Amount,
+		"desc":             p.Desc,
+		"spbill_create_ip": p.SpBillCreateIP,
+	}
+	bytesReq, err := xml.Marshal(m)
+	if err != nil {
+		return nil, err
+	}
+	str_req := string(bytesReq)
+	str_req = strings.Replace(str_req, "EnterpriseTransfers", "xml", -1)
+	req, err := http.NewRequest("POST", TRANSFERS_URL, bytes.NewReader([]byte(str_req)))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/xml")
+	req.Header.Set("Content-Type", "application/xml;charset=utf-8")
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	w_req := http.Client{Transport: tr}
+	resp, err := w_req.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	var pay_result EnterpriseTransfersResult
+	err = xml.Unmarshal(body, &pay_result)
+	if err != nil {
+		return nil, err
+	}
+	return &pay_result, nil
+}
