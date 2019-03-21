@@ -111,10 +111,10 @@ func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResul
 	}
 	req.Header.Set("Accept", "application/xml")
 	req.Header.Set("Content-Type", "application/xml;charset=utf-8")
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	w_req := http.Client{Transport: tr}
+	//tr := &http.Transport{
+	//	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	//}
+	w_req := http.Client{Transport: WithCertBytes(w.ApiclientCert, w.ApiclientKey)}
 	resp, err := w_req.Do(req)
 	if err != nil {
 		return nil, err

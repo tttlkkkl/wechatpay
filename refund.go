@@ -2,6 +2,7 @@ package wechatpay
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/xml"
 	log "github.com/sdbaiguanghe/glog"
 	"io/ioutil"
@@ -102,10 +103,10 @@ func (this *WechatPay) RefundQuery(refund_status OrderRefundQuery) (*OrderRefund
 	req.Header.Set("Accept", "application/xml")
 	req.Header.Set("Content-Type", "application/xml;charset=utf-8")
 
-	//tr := &http.Transport{
-	//	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	//}
-	w_req := http.Client{Transport: WithCertBytes(this.ApiclientCert, this.ApiclientKey)}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	w_req := http.Client{Transport: tr}
 	resp, _err := w_req.Do(req)
 	if _err != nil {
 		log.Error(err, "http request failed! err :"+_err.Error())
