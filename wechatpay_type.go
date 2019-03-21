@@ -157,8 +157,10 @@ type EnterpriseTransfersResult struct {
 	MchID          string `xml:"mchid"`
 	DeviceInfo     string `xml:"device_info"`
 	NonceStr       string `xml:"nonce_str"`
+	ResultCode     string `xml:"result_code"`
 	ErrCode        string `xml:"err_code"`
 	ErrCodeDes     string `xml:"err_code_des"`
 	PartnerTradeNo string `xml:"partner_trade_no"`
+	PaymentNo      string `xml:"payment_no"`
 	PaymentTime    string `xml:"payment_time"`
 }
