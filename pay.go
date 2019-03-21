@@ -98,7 +98,8 @@ func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResul
 		"desc":             p.Desc,
 		"spbill_create_ip": p.SpBillCreateIP,
 	}
-	bytesReq, err := xml.Marshal(m)
+	p.Sign = GetSign(m, w.ApiKey)
+	bytesReq, err := xml.Marshal(p)
 	if err != nil {
 		return nil, err
 	}
