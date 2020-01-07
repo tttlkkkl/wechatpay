@@ -14,34 +14,36 @@ import (
 	"time"
 )
 
+// WechatPay 微信支付
 type WechatPay struct {
-	AppId         string
-	MchId         string
-	ApiKey        string
+	AppID         string
+	MchID         string
+	APIKey        string
 	ApiclientCert []byte
 	ApiclientKey  []byte
 }
 
-func New(appId, mchId, apiKey string, apiclient_cert, apiclient_key []byte) (client *WechatPay) {
+// New 实例化一个支付客户端
+func New(appID, mchID, apiKey string, apiclientCert, apiclientKey []byte) (client *WechatPay) {
 	client = &WechatPay{}
-	client.AppId = appId
-	client.MchId = mchId
-	client.ApiKey = apiKey
-	client.ApiclientCert = apiclient_cert
-	client.ApiclientKey = apiclient_key
+	client.AppID = appID
+	client.MchID = mchID
+	client.APIKey = apiKey
+	client.ApiclientCert = apiclientCert
+	client.ApiclientKey = apiclientKey
 	return client
 }
 
-//wxpay计算签名的函数
+// GetSign wxpay计算签名的函数
 func GetSign(mReq map[string]interface{}, key string) (sign string) {
 
-	sorted_keys := make([]string, 0)
-	for k, _ := range mReq {
-		sorted_keys = append(sorted_keys, k)
+	sortedKeys := make([]string, 0)
+	for k := range mReq {
+		sortedKeys = append(sortedKeys, k)
 	}
-	sort.Strings(sorted_keys)
+	sort.Strings(sortedKeys)
 	var signStrings string
-	for _, k := range sorted_keys {
+	for _, k := range sortedKeys {
 		value := fmt.Sprintf("%v", mReq[k])
 		if value != "" {
 			signStrings = signStrings + k + "=" + value + "&"
@@ -57,10 +59,10 @@ func GetSign(mReq map[string]interface{}, key string) (sign string) {
 	return upperSign
 }
 
-//微信支付签名验证函数
-func (this *WechatPay) VerifySign(needVerifyM map[string]interface{}, sign string) bool {
+// VerifySign 微信支付签名验证函数
+func (w *WechatPay) VerifySign(needVerifyM map[string]interface{}, sign string) bool {
 	delete(needVerifyM, "sign")
-	signCalc := GetSign(needVerifyM, this.ApiKey)
+	signCalc := GetSign(needVerifyM, w.APIKey)
 	if sign == signCalc {
 		log.Info("wechat verify success!")
 		return true
@@ -69,6 +71,7 @@ func (this *WechatPay) VerifySign(needVerifyM map[string]interface{}, sign strin
 	return false
 }
 
+// WithCertBytes 证书
 func WithCertBytes(cert, key []byte) *http.Transport {
 	tlsCert, err := tls.X509KeyPair(cert, key)
 	if err != nil {

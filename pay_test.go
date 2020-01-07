@@ -1,34 +1,35 @@
 package wechatpay
 
-
 import (
-	"os"
 	"fmt"
+	"os"
 	"testing"
 )
+
 var (
-	wechat_cert = "111111111111232121321311"
-	wechat_key = "12123222222222223232332323"
-	wechat_app_id = "102801212"
-	wechat_mch_id = "232312123"
-	wechat_api_key = "121212"
+	wechatCert   = "111111111111232121321311"
+	wechatKey    = "12123222222222223232332323"
+	wechatAppID  = "102801212"
+	wechatMchID  = "232312123"
+	wechatAPIKey = "121212"
 )
-var wechat_client *WechatPay
+var wechatClient *WechatPay
+
 func TestMain(m *testing.M) {
-	wechat_client = New(wechat_app_id, wechat_mch_id,
-		wechat_api_key, []byte(wechat_cert), []byte(wechat_key))
+	wechatClient = New(wechatAppID, wechatMchID,
+		wechatAPIKey, []byte(wechatCert), []byte(wechatKey))
 	exitCode := m.Run()
 	os.Exit(exitCode)
 }
 
 func TestWechat_Pay(t *testing.T) {
-	var pay_data UnitOrder
-	pay_data.NotifyUrl = "http://47.98.87.189"
-	pay_data.TradeType = "NATIVE"
-	pay_data.Body = "测试支付"
-	pay_data.SpbillCreateIp = "47.98.87.189"
-	pay_data.TotalFee = 1
-	pay_data.OutTradeNo = "123456789"
+	var payData UnitOrder
+	payData.NotifyURL = "http://47.98.87.189"
+	payData.TradeType = "NATIVE"
+	payData.Body = "测试支付"
+	payData.SpbillCreateIP = "47.98.87.189"
+	payData.TotalFee = 1
+	payData.OutTradeNo = "123456789"
 
-	fmt.Println(wechat_client.Pay(pay_data))
+	fmt.Println(wechatClient.Pay(payData))
 }

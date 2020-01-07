@@ -9,22 +9,22 @@ import (
 	"strings"
 )
 
-//统一下单
-func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
-	if param.AppId == "" {
-		param.AppId = this.AppId
+// Pay 统一下单
+func (w *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
+	if param.AppID == "" {
+		param.AppID = w.AppID
 	}
-	param.MchId = this.MchId
+	param.MchID = w.MchID
 	param.NonceStr = randomNonceStr()
 
 	var m map[string]interface{}
 	m = make(map[string]interface{}, 0)
-	m["appid"] = param.AppId
+	m["appid"] = param.AppID
 	m["body"] = param.Body
-	m["mch_id"] = param.MchId
-	m["notify_url"] = param.NotifyUrl
+	m["mch_id"] = param.MchID
+	m["notify_url"] = param.NotifyURL
 	m["trade_type"] = param.TradeType
-	m["spbill_create_ip"] = param.SpbillCreateIp
+	m["spbill_create_ip"] = param.SpbillCreateIP
 	m["total_fee"] = param.TotalFee
 	m["out_trade_no"] = param.OutTradeNo
 	m["nonce_str"] = param.NonceStr
@@ -43,17 +43,15 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.Attach != "" {
 		m["attach"] = param.Attach
 	}
-	//fmt.Println("=======微信支付申请单=========", m)
-	param.Sign = GetSign(m, this.ApiKey)
+	param.Sign = GetSign(m, w.APIKey)
 
-	bytes_req, err := xml.Marshal(param)
+	bytesReq, err := xml.Marshal(param)
 	if err != nil {
 		return nil, err
 	}
-	str_req := string(bytes_req)
-	//fmt.Println("======签名后 xml 字符串====", str_req)
-	str_req = strings.Replace(str_req, "UnitOrder", "xml", -1)
-	req, err := http.NewRequest("POST", UNIT_ORDER_URL, bytes.NewReader([]byte(str_req)))
+	strReq := string(bytesReq)
+	strReq = strings.Replace(strReq, "UnitOrder", "xml", -1)
+	req, err := http.NewRequest("POST", UNITORDERURL, bytes.NewReader([]byte(strReq)))
 	if err != nil {
 		return nil, err
 	}
@@ -65,26 +63,26 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	w_req := http.Client{Transport: tr}
-	resp, err := w_req.Do(req)
+	wReq := http.Client{Transport: tr}
+	resp, err := wReq.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	var pay_result UnifyOrderResult
-	err = xml.Unmarshal(body, &pay_result)
+	var payResult UnifyOrderResult
+	err = xml.Unmarshal(body, &payResult)
 	if err != nil {
 		return nil, err
 	}
-	return &pay_result, nil
+	return &payResult, nil
 }
 
 // Transfers 企业付款
 func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResult, error) {
-	p.MchID = w.MchId
+	p.MchID = w.MchID
 	if p.MchAppID == "" {
-		p.MchAppID = w.AppId
+		p.MchAppID = w.AppID
 	}
 	p.NonceStr = randomNonceStr()
 	var m = map[string]interface{}{
@@ -101,14 +99,14 @@ func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResul
 		"desc":             p.Desc,
 		"spbill_create_ip": p.SpBillCreateIP,
 	}
-	p.Sign = GetSign(m, w.ApiKey)
+	p.Sign = GetSign(m, w.APIKey)
 	bytesReq, err := xml.Marshal(p)
 	if err != nil {
 		return nil, err
 	}
-	str_req := string(bytesReq)
-	str_req = strings.Replace(str_req, "EnterpriseTransfers", "xml", -1)
-	req, err := http.NewRequest("POST", TRANSFERS_URL, bytes.NewReader([]byte(str_req)))
+	strReq := string(bytesReq)
+	strReq = strings.Replace(strReq, "EnterpriseTransfers", "xml", -1)
+	req, err := http.NewRequest("POST", TRANSFERSURL, bytes.NewReader([]byte(strReq)))
 	if err != nil {
 		return nil, err
 	}
@@ -117,17 +115,17 @@ func (w *WechatPay) Transfers(p *EnterpriseTransfers) (*EnterpriseTransfersResul
 	//tr := &http.Transport{
 	//	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	//}
-	w_req := http.Client{Transport: WithCertBytes(w.ApiclientCert, w.ApiclientKey)}
-	resp, err := w_req.Do(req)
+	wReq := http.Client{Transport: WithCertBytes(w.ApiclientCert, w.ApiclientKey)}
+	resp, err := wReq.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	var pay_result EnterpriseTransfersResult
-	err = xml.Unmarshal(body, &pay_result)
+	var payResult EnterpriseTransfersResult
+	err = xml.Unmarshal(body, &payResult)
 	if err != nil {
 		return nil, err
 	}
-	return &pay_result, nil
+	return &payResult, nil
 }

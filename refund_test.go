@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"testing"
 )
-func TestWechat_Refund(t *testing.T) {
-	var refund_data OrderRefund
 
-	refund_data.TotalFee = 1
-	refund_data.OutTradeNo = "1234567"
-	refund_data.OutRefundNo = "r122121"
-	refund_data.RefundFee = 1
-	fmt.Println(wechat_client.Refund(refund_data))
+func TestWechat_Refund(t *testing.T) {
+	var refundData OrderRefund
+
+	refundData.TotalFee = 1
+	refundData.OutTradeNo = "1234567"
+	refundData.OutRefundNo = "r122121"
+	refundData.RefundFee = 1
+	fmt.Println(wechatClient.Refund(refundData))
 }
