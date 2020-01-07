@@ -37,6 +37,9 @@ func (this *WechatPay) Pay(param UnitOrder) (*UnifyOrderResult, error) {
 	if param.TimeExpire != "" {
 		m["time_expire"] = param.TimeExpire
 	}
+	if param.TimeStart != "" {
+		m["time_start"] = param.TimeStart
+	}
 	if param.Attach != "" {
 		m["attach"] = param.Attach
 	}
